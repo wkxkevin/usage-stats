@@ -37,3 +37,25 @@ do
 	mkdir Stats/monotype/$d
 	mv Stats/$d/gen9monotype-mono* Stats/monotype/$d/.
 done
+
+function process2 {
+	tier=$1
+	tag=muchart
+
+	echo "Processing "$tier >> log.log
+
+	python MonotypeMUChart.py $tier 1630 $tag
+
+	python MonotypeMUChart.py $tier 1760 $tag
+
+	python MonotypeMUChart.py $tier 0 $tag
+
+	python MonotypeMUChart.py $tier 1500 $tag
+}
+export -f process2
+
+parallel -j 2 process2 ::: gen9monotype gen9nationaldexmonotype
+
+mkdir Stats/monotype/matchupcharts
+mv Stats/gen9monotype-matchup* Stats/monotype/matchupcharts/.
+mv Stats/gen9nationaldexmonotype-matchup* Stats/monotype/matchupcharts/.
